@@ -1,0 +1,48 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
+    id "de.buehmann.gradle.jubula" version "4.1.1"
+}
+
+mainClassName = 'dev.mrpanda.ChannelTroller.Bot'
+
+version '1.0'
+
+sourceCompatibility = 1.8
+
+jar {
+
+    archiveName = "ChannelTroller.jar"
+
+    from {
+
+        configurations.runtime.findAll { !it.name.endsWith('pom') }.collect {
+        	it.isDirectory() ? it : zipTree(it)
+        }
+
+        configurations.compile.findAll { !it.name.endsWith('pom') }.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+        
+    }
+
+    manifest {
+        attributes 'Main-Class': 'dev.mrpanda.ChannelTroller.Bot'
+    }
+
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+	compile 'com.sedmelluq:lavaplayer:1.3.50'
+	compile 'org.slf4j:slf4j-nop:1.7.30'
+	compile 'com.jagrosh:jda-utilities:3.0.4'
+    compile 'net.dv8tion:JDA:4.2.0_183'
+}
+
+compileJava.options.encoding = 'UTF-8'
